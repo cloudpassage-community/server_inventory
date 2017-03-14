@@ -1,9 +1,11 @@
 import lib
+from collections import defaultdict
 
 class HaloServerInventory():
     def __init__(self):
         self.halo = lib.ServerController(lib.CONFIG["halo"])
         self.output = [["Server Group", "Server Hostname", "OS Type", "OS Version", "EC2 Instance ID", "Softwares"]]
+        self.dict = defaultdict(list)
 
     def build(self):
         for server in self.halo.get_server():
@@ -13,11 +15,12 @@ class HaloServerInventory():
             else:
                 tmp.append("")
             tmp.append(self.halo.parse_software_list(self.halo.get_server_software(server["id"])))
-            self.output.append(tmp)
+            self.dict[server["group_name"]].append(tmp)
 
     def run(self):
         self.build()
-        lib.CsvWriter.write(self.output)
+        for server_group in self.dict:
+            lib.CsvWriter.write(self.output, server_group, self.dict[server_group])
 
 def main():
     halo_inventory = HaloServerInventory()
