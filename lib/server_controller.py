@@ -30,8 +30,8 @@ class ServerController(object):
             result.extend(self.get_srv_software_pag(softwares["count"], srv_id))
         return result
 
-
-    def parse_software_list(self, softwares):
+    @classmethod
+    def parse_software_list(cls, softwares):
         sw_name = ""
         for software in softwares:
             sw_name += "%s (%s), " % (software["package_name"], software["package_version"])
