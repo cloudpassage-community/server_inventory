@@ -32,7 +32,7 @@ class ServerController(object):
 
     @classmethod
     def parse_software_list(cls, softwares):
-        sw_name = ""
+        sw_name = []
         for software in softwares:
-            sw_name += "%s (%s), " % (software["package_name"], software["package_version"])
+            sw_name.append("%s (%s)" % (software["package_name"], software["package_version"]))
         return sw_name

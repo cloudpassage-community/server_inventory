@@ -26,7 +26,7 @@ class HaloServerInventory():
                 tmp.append(server["aws_ec2"]["ec2_instance_id"])
             else:
                 tmp.append("")
-            tmp.append(self.halo.parse_software_list(self.halo.get_server_software(server["id"])))
+            tmp.extend(self.halo.parse_software_list(self.halo.get_server_software(server["id"])))
             self.write_csv(server["group_name"], [tmp])
             lib.Counter.progress(self.count, self.total)
 
