@@ -3,13 +3,13 @@ import logging
 import sys
 import lib
 
-# log = logging.getLogger('cphalo-srv_inventory')
-# logging.basicConfig(
-#     level=logging.INFO,
-#     format='%(asctime)s:%(levelname)s:%(name)s: %(message)s',
-#     filename="server_inventory.log",
-#     filemode='a'
-# )
+log = logging.getLogger('cphalo-srv_inventory')
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s:%(levelname)s:%(name)s: %(message)s',
+    filename="server_inventory.log",
+    filemode='a'
+)
 
 class HaloServerInventory():
     def __init__(self):
@@ -49,8 +49,8 @@ class HaloServerInventory():
 
 def main():
     halo_inventory = HaloServerInventory()
-    # sys.stdout = lib.LoggerWriter(log.info)
-    # sys.stderr = lib.LoggerWriter(log.warning)
+    sys.stdout = lib.LoggerWriter(log.info)
+    sys.stderr = lib.LoggerWriter(log.warning)
     sys.stdout.write("Starting to collect server information")
     halo_inventory.run()
     sys.stdout.write("The Script has finished storing all server information")
