@@ -3,13 +3,13 @@ import logging
 import sys
 import lib
 
-log = logging.getLogger('cphalo-srv_inventory')
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s:%(levelname)s:%(name)s: %(message)s',
-    filename="server_inventory.log",
-    filemode='a'
-)
+# log = logging.getLogger('cphalo-srv_inventory')
+# logging.basicConfig(
+#     level=logging.INFO,
+#     format='%(asctime)s:%(levelname)s:%(name)s: %(message)s',
+#     filename="server_inventory.log",
+#     filemode='a'
+# )
 
 class HaloServerInventory():
     def __init__(self):
@@ -31,17 +31,26 @@ class HaloServerInventory():
             lib.Counter.progress(self.count, self.total)
 
     def write_csv(self, srv_grp, srv_info):
-        filename = "%s.csv" %srv_grp
+        encoded_srv_grp = srv_grp.encode('utf-8')
+        encoded_srv_info = self.encoding(srv_info)
+
+        filename = "%s.csv" % (encoded_srv_grp)
         if os.path.exists(filename):
-            lib.CsvWriter.append(srv_grp, srv_info)
+            lib.CsvWriter.append(encoded_srv_grp, encoded_srv_info)
         else:
-            lib.CsvWriter.write(self.output, srv_grp, srv_info)
+            lib.CsvWriter.write(self.output, encoded_srv_grp, encoded_srv_info)
         self.count += 1
+
+    def encoding(self, data):
+        tmp = []
+        for i in data:
+            tmp.append([x.encode('utf-8') for x in i])
+        return tmp
 
 def main():
     halo_inventory = HaloServerInventory()
-    sys.stdout = lib.LoggerWriter(log.info)
-    sys.stderr = lib.LoggerWriter(log.warning)
+    # sys.stdout = lib.LoggerWriter(log.info)
+    # sys.stderr = lib.LoggerWriter(log.warning)
     sys.stdout.write("Starting to collect server information")
     halo_inventory.run()
     sys.stdout.write("The Script has finished storing all server information")
